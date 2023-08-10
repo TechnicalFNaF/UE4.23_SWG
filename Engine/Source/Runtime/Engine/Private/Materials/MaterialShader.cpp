@@ -2548,9 +2548,9 @@ void FMaterialShaderMap::Serialize(FArchive& Ar, bool bInlineShaderResources, bo
 
 			// Not handling missing vertex factory types on cooked data
 			// The cooker binary and running binary are assumed to be on the same code version
-			check(VFType);
+			//check(VFType);
 			FMeshMaterialShaderMap* MeshShaderMap = OrderedMeshShaderMaps[VFType->GetId()];
-			check(MeshShaderMap);
+			//check(MeshShaderMap);
 			MeshShaderMap->SerializeInline(Ar, bInlineShaderResources, false, bLoadedByCookedMaterial);
 		}
 

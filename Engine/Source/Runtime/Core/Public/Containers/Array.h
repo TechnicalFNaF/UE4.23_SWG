@@ -611,7 +611,7 @@ public:
 		// Template property, branch will be optimized out
 		if (Allocator::RequireRangeCheck)
 		{
-			checkf((Index >= 0) & (Index < ArrayNum),TEXT("Array index out of bounds: %i from an array of size %i"),Index,ArrayNum); // & for one branch
+			//checkf((Index >= 0) & (Index < ArrayNum),TEXT("Array index out of bounds: %i from an array of size %i"),Index,ArrayNum); // & for one branch
 		}
 	}
 

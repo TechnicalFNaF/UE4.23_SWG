@@ -1788,7 +1788,7 @@ bool FMaterial::CacheShaders(const FMaterialShaderMapId& ShaderMapId, EShaderPla
 	const bool bLogShaderMapFailInfo = bSpecialEngineMaterial && (bContainsInlineShaders || FPlatformProperties::RequiresCookedData());
 
 
-	bool bAssumeShaderMapIsComplete = false;
+	bool bAssumeShaderMapIsComplete = true;
 #if UE_BUILD_SHIPPING || UE_BUILD_TEST
 	bAssumeShaderMapIsComplete = (bContainsInlineShaders || FPlatformProperties::RequiresCookedData()) 
 		&& !bLogShaderMapFailInfo; // if it is the special engine material, we will check it

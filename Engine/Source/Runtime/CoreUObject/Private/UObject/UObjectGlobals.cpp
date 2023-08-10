@@ -62,7 +62,7 @@ DEFINE_LOG_CATEGORY(LogUObjectGlobals);
 #endif
 
 bool GIsSavingPackage = false;
-bool GAllowUnversionedContentInEditor = false;
+bool GAllowUnversionedContentInEditor = true;
 
 /** Object annotation used by the engine to keep track of which objects are selected */
 FUObjectAnnotationSparseBool GSelectedObjectAnnotation;

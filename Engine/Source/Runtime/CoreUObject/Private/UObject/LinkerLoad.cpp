@@ -83,7 +83,7 @@ bool FLinkerLoad::ShouldCreateThrottledSlowTask() const
 #endif
 
 
-int32 GAllowCookedDataInEditorBuilds = 0;
+int32 GAllowCookedDataInEditorBuilds = 1;
 static FAutoConsoleVariableRef CVarAllowCookedDataInEditorBuilds(
 	TEXT("cook.AllowCookedDataInEditorBuilds"),
 		GAllowCookedDataInEditorBuilds,
@@ -4648,29 +4648,29 @@ UObject* FLinkerLoad::IndexToObject( FPackageIndex Index )
 	{
 		#if PLATFORM_DESKTOP
 			// Show a message box indicating, possible, corrupt data (desktop platforms only)
-			if ( !ImportMap.IsValidIndex( Index.ToImport() ) && !FApp::IsUnattended() )
-			{
-				FText ErrorMessage, ErrorCaption;
-				GConfig->GetText(TEXT("/Script/Engine.Engine"),
-									TEXT("SerializationOutOfBoundsErrorMessage"),
-									ErrorMessage,
-									GEngineIni);
-				GConfig->GetText(TEXT("/Script/Engine.Engine"),
-					TEXT("SerializationOutOfBoundsErrorMessageCaption"),
-					ErrorCaption,
-					GEngineIni);
-
-				UE_LOG( LogLinker, Error, TEXT("Invalid import object index=%d while reading %s. File is most likely corrupted. Please verify your installation."), Index.ToImport(), *Filename );
-
-				if (GLog)
-				{
-					GLog->Flush();
-				}
-
-				FPlatformMisc::MessageBoxExt(EAppMsgType::Ok, *ErrorMessage.ToString(), *ErrorCaption.ToString());
-
-				check(false);
-			}
+			//if ( !ImportMap.IsValidIndex( Index.ToImport() ) && !FApp::IsUnattended() )
+			//{
+			//	FText ErrorMessage, ErrorCaption;
+			//	GConfig->GetText(TEXT("/Script/Engine.Engine"),
+			//						TEXT("SerializationOutOfBoundsErrorMessage"),
+			//						ErrorMessage,
+			//						GEngineIni);
+			//	GConfig->GetText(TEXT("/Script/Engine.Engine"),
+			//		TEXT("SerializationOutOfBoundsErrorMessageCaption"),
+			//		ErrorCaption,
+			//		GEngineIni);
+			//
+			//	UE_LOG( LogLinker, Error, TEXT("Invalid import object index=%d while reading %s. File is most likely corrupted. Please verify your installation."), Index.ToImport(), *Filename );
+			//
+			//	if (GLog)
+			//	{
+			//		GLog->Flush();
+			//	}
+			//
+			//	FPlatformMisc::MessageBoxExt(EAppMsgType::Ok, *ErrorMessage.ToString(), *ErrorCaption.ToString());
+			//
+			//	check(false);
+			//}
 		#else
 			{
 				UE_CLOG( !ImportMap.IsValidIndex( Index.ToImport() ), LogLinker, Fatal, TEXT("Invalid import object index=%d while reading %s. File is most likely corrupted. Please verify your installation."), Index.ToImport(), *Filename );
