@@ -91,9 +91,12 @@ void UUserDefinedStruct::Serialize(FStructuredArchive::FRecord Record)
 #if WITH_EDITOR
 	if (UnderlyingArchive.IsLoading())
 	{
-		for (TFieldIterator<UProperty> PropIt(this); PropIt; ++PropIt)
+		if (UnderlyingArchive.CustomVer(FFrameworkObjectVersion::GUID) < FFrameworkObjectVersion::UserDefinedStructsBlueprintVisible)
 		{
-			PropIt->PropertyFlags |= CPF_BlueprintVisible;
+			for (TFieldIterator<UProperty> PropIt(this); PropIt; ++PropIt)
+			{
+				PropIt->PropertyFlags |= CPF_BlueprintVisible;
+			}
 		}
 
 		if (EUserDefinedStructureStatus::UDSS_UpToDate == Status)
