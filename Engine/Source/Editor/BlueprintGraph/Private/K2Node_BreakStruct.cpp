@@ -155,7 +155,7 @@ static bool CanCreatePinForProperty(const UProperty* Property)
 
 bool UK2Node_BreakStruct::CanBeBroken(const UScriptStruct* Struct, const bool bForInternalUse)
 {
-	if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll) return true;
+	//if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll) return true;
 
 	if (Struct && !Struct->HasMetaData(FBlueprintMetadata::MD_NativeBreakFunction) && UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Struct, bForInternalUse))
 	{
@@ -271,8 +271,8 @@ void UK2Node_BreakStruct::ValidateNodeDuringCompilation(class FCompilerResultsLo
 			if (CanCreatePinForProperty(Property))
 			{
 				bool bIsBlueprintVisible = Property->HasAnyPropertyFlags(CPF_BlueprintVisible) || (Property->GetOwnerStruct() && Property->GetOwnerStruct()->IsA<UUserDefinedStruct>());
-				if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll)
-					bIsBlueprintVisible = true;
+				//if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll)
+				//	bIsBlueprintVisible = true;
 				
 				bHasAnyBlueprintVisibleProperty |= bIsBlueprintVisible;
 

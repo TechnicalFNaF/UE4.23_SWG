@@ -42,6 +42,9 @@ void UK2Node_StructOperation::FStructOperationOptionalPinManager::CustomizePinDa
 		const UUserDefinedStruct* UDStructure = Cast<const UUserDefinedStruct>(Property->GetOwnerStruct());
 		if (UDStructure)
 		{
+			if (!UDStructure->EditorData)
+				return;
+
 			const FStructVariableDescription* VarDesc = FStructureEditorUtils::GetVarDesc(UDStructure).FindByPredicate(
 				FStructureEditorUtils::FFindByNameHelper<FStructVariableDescription>(Property->GetFName()));
 			if (VarDesc)
