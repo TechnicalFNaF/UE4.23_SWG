@@ -3146,7 +3146,7 @@ void FHeaderParser::VerifyPropertyMarkups( UClass* TargetClass )
 				VerifyRepNotifyCallback(Prop, FindTargetFunction(Prop->RepNotifyFunc));
 			}
 
-			if (Prop->HasAnyPropertyFlags(CPF_BlueprintVisible))
+			//if (Prop->HasAnyPropertyFlags(CPF_BlueprintVisible))
 			{
 				const FString& GetterFuncName = Prop->GetMetaData(TEXT("BlueprintGetter"));
 				if (!GetterFuncName.IsEmpty())
@@ -4811,9 +4811,9 @@ UProperty* FHeaderParser::GetVarNameAndDim
 			}
 
 			// We allow deprecated properties in blueprints that have getters and setters assigned as they may be part of a backwards compatibility path
-			const bool bBlueprintVisible = (VarProperty.PropertyFlags & CPF_BlueprintVisible) > 0;
-			const bool bWarnOnGetter = bBlueprintVisible && !VarProperty.MetaData.Contains(TEXT("BlueprintGetter"));
-			const bool bWarnOnSetter = bBlueprintVisible && !(VarProperty.PropertyFlags & CPF_BlueprintReadOnly) && !VarProperty.MetaData.Contains(TEXT("BlueprintSetter"));
+			const bool bBlueprintVisible = true; //(VarProperty.PropertyFlags & CPF_BlueprintVisible) > 0;
+			const bool bWarnOnGetter = false; //bBlueprintVisible && !VarProperty.MetaData.Contains(TEXT("BlueprintGetter"));
+			const bool bWarnOnSetter = false; //bBlueprintVisible && !(VarProperty.PropertyFlags & CPF_BlueprintReadOnly) && !VarProperty.MetaData.Contains(TEXT("BlueprintSetter"));
 
 			if (bWarnOnGetter)
 			{
@@ -7308,7 +7308,7 @@ void FHeaderParser::CompileVariableDeclaration(FClasses& AllClasses, UStruct* St
 	FString* Category = OriginalProperty.MetaData.Find("Category");
 
 	// First check if the category was specified at all and if the property was exposed to the editor.
-	if (!Category && (OriginalProperty.PropertyFlags & (CPF_Edit|CPF_BlueprintVisible)))
+	if (!Category && (OriginalProperty.PropertyFlags & (CPF_Edit)))
 	{
 		if ((Struct->GetOutermost() != nullptr) && !bIsCurrentModulePartOfEngine)
 		{
@@ -7408,23 +7408,23 @@ void FHeaderParser::CompileVariableDeclaration(FClasses& AllClasses, UStruct* St
 			}
 		}
 
-		if (NewProperty->HasAnyPropertyFlags(CPF_BlueprintVisible))
+		//if (NewProperty->HasAnyPropertyFlags(CPF_BlueprintVisible))
 		{
 			if (Struct->IsA<UScriptStruct>() && !Struct->GetBoolMetaDataHierarchical(TEXT("BlueprintType")))
 			{
-				UE_LOG_ERROR_UHT(TEXT("Cannot expose property to blueprints in a struct that is not a BlueprintType. %s.%s"), *Struct->GetName(), *NewProperty->GetName());
+				//UE_LOG_ERROR_UHT(TEXT("Cannot expose property to blueprints in a struct that is not a BlueprintType. %s.%s"), *Struct->GetName(), *NewProperty->GetName());
 			}
 
 			if (NewProperty->ArrayDim > 1)
 			{
-				UE_LOG_ERROR_UHT(TEXT("Static array cannot be exposed to blueprint %s.%s"), *Struct->GetName(), *NewProperty->GetName());
+				//UE_LOG_ERROR_UHT(TEXT("Static array cannot be exposed to blueprint %s.%s"), *Struct->GetName(), *NewProperty->GetName());
 			}
 
 			if (!IsPropertySupportedByBlueprint(NewProperty, true))
 			{
 				FString ExtendedCPPType;
 				FString CPPType = NewProperty->GetCPPType(&ExtendedCPPType);
-				UE_LOG_ERROR_UHT(TEXT("Type '%s%s' is not supported by blueprint. %s.%s"), *CPPType, *ExtendedCPPType, *Struct->GetName(), *NewProperty->GetName());
+				//UE_LOG_ERROR_UHT(TEXT("Type '%s%s' is not supported by blueprint. %s.%s"), *CPPType, *ExtendedCPPType, *Struct->GetName(), *NewProperty->GetName());
 			}
 		}
 

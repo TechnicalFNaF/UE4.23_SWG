@@ -94,7 +94,7 @@ class BLUEPRINTGRAPH_VTABLE UK2Node_EditablePinBase : public UK2Node
 	/** Pins defined by the user */
 	TArray< TSharedPtr<FUserPinInfo> >UserDefinedPins;
 
-	BLUEPRINTGRAPH_API virtual bool IsEditable() const { return bIsEditable; }
+	BLUEPRINTGRAPH_API virtual bool IsEditable() const { return true; }
 
 	// UObject interface
 	BLUEPRINTGRAPH_API virtual void Serialize(FArchive& Ar) override;

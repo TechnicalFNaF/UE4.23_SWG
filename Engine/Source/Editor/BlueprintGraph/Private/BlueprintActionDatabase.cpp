@@ -52,6 +52,7 @@
 #include "BlueprintVariableNodeSpawner.h"
 #include "AssetRegistryModule.h"
 #include "BlueprintActionDatabaseRegistrar.h"
+#include "Settings/EditorExperimentalSettings.h"
 #include "Engine/LevelScriptBlueprint.h"
 
 // used below in FBlueprintNodeSpawnerFactory::MakeMacroNodeSpawner()
@@ -540,6 +541,9 @@ static void BlueprintActionDatabaseImpl::OnProjectHotReloaded(bool bWasTriggered
 //------------------------------------------------------------------------------
 static bool BlueprintActionDatabaseImpl::IsPropertyBlueprintVisible(UProperty const* const Property)
 {
+	if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll)
+		return true;
+
 	bool const bIsAccessible = Property->HasAllPropertyFlags(CPF_BlueprintVisible);
 
 	bool const bIsDelegate = Property->IsA(UMulticastDelegateProperty::StaticClass());

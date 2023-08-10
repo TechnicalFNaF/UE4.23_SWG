@@ -307,7 +307,7 @@ UEdGraphNode* FBlueprintNodeTemplateCache::GetNodeTemplate(UBlueprintNodeSpawner
 			};
 
 			TargetGraph = FindCompatibleGraph(TargetBlueprint, NodeCDO, IsCompatibleUserGraph);
-			check(TargetGraph != nullptr);
+			//check(TargetGraph != nullptr);
 		}		
 
 		UBlueprint* CompatibleBlueprint = nullptr;

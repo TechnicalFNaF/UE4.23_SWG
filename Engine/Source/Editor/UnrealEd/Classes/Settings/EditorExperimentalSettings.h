@@ -58,6 +58,10 @@ public:
 	UPROPERTY(EditAnywhere, config, Category = Blueprints, meta = (DisplayName = "Find and Replace All References Tool"))
 	bool bEnableFindAndReplaceReferences;
 
+	/** Enables Showing all properties*/
+	UPROPERTY(EditAnywhere, config, Category = Blueprints, meta = (DisplayName = "Displays all properties to get and set in blueprint graph (LAGGY)"))
+	bool bEnabledShowAll;
+
 	/** Should arrows indicating data/execution flow be drawn halfway along wires? */
 	UPROPERTY(/*EditAnywhere - deprecated (moved into UBlueprintEditorSettings), */config/*, Category=Blueprints, meta=(DisplayName="Draw midpoint arrows in Blueprints")*/)
 	bool bDrawMidpointArrowsInBlueprints;

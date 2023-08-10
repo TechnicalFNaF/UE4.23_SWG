@@ -14,6 +14,7 @@
 #include "BlueprintActionDatabaseRegistrar.h"
 #include "PropertyCustomizationHelpers.h"
 #include "BlueprintEditorSettings.h"
+#include "Settings/EditorExperimentalSettings.h"
 #include "Kismet/KismetMathLibrary.h"
 
 #define LOCTEXT_NAMESPACE "K2Node_BreakStruct"
@@ -154,6 +155,8 @@ static bool CanCreatePinForProperty(const UProperty* Property)
 
 bool UK2Node_BreakStruct::CanBeBroken(const UScriptStruct* Struct, const bool bForInternalUse)
 {
+	if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll) return true;
+
 	if (Struct && !Struct->HasMetaData(FBlueprintMetadata::MD_NativeBreakFunction) && UEdGraphSchema_K2::IsAllowableBlueprintVariableType(Struct, bForInternalUse))
 	{
 		for (TFieldIterator<UProperty> It(Struct); It; ++It)
@@ -267,7 +270,10 @@ void UK2Node_BreakStruct::ValidateNodeDuringCompilation(class FCompilerResultsLo
 			const UProperty* Property = *It;
 			if (CanCreatePinForProperty(Property))
 			{
-				const bool bIsBlueprintVisible = Property->HasAnyPropertyFlags(CPF_BlueprintVisible) || (Property->GetOwnerStruct() && Property->GetOwnerStruct()->IsA<UUserDefinedStruct>());
+				bool bIsBlueprintVisible = Property->HasAnyPropertyFlags(CPF_BlueprintVisible) || (Property->GetOwnerStruct() && Property->GetOwnerStruct()->IsA<UUserDefinedStruct>());
+				if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll)
+					bIsBlueprintVisible = true;
+				
 				bHasAnyBlueprintVisibleProperty |= bIsBlueprintVisible;
 
 				const UEdGraphPin* Pin = FindPin(Property->GetFName());

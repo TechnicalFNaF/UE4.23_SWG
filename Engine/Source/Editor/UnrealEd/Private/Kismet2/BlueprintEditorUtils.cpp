@@ -7938,28 +7938,31 @@ public:
 		// If it appears on the allowed child-of classes list (or there is nothing on that list)
 		//		AND it is NOT on the disallowed child-of classes list
 		//		AND it is NOT on the disallowed classes list
-		return InFilterFuncs->IfInChildOfClassesSet( AllowedChildrenOfClasses, InClass) != EFilterReturn::Failed && 
-			InFilterFuncs->IfInChildOfClassesSet(DisallowedChildrenOfClasses, InClass) != EFilterReturn::Passed && 
-			InFilterFuncs->IfInClassesSet(DisallowedClasses, InClass) != EFilterReturn::Passed &&
-			!InClass->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists) &&
-			InClass->HasAnyClassFlags(CLASS_Interface) &&
-			// Here is some loaded classes only logic, Blueprints will never have this info
-			!InClass->HasMetaData(FBlueprintMetadata::MD_CannotImplementInterfaceInBlueprint);
+		return true;
+
+		//return InFilterFuncs->IfInChildOfClassesSet( AllowedChildrenOfClasses, InClass) != EFilterReturn::Failed && 
+		//	InFilterFuncs->IfInChildOfClassesSet(DisallowedChildrenOfClasses, InClass) != EFilterReturn::Passed && 
+		//	InFilterFuncs->IfInClassesSet(DisallowedClasses, InClass) != EFilterReturn::Passed &&
+		//	!InClass->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists) &&
+		//	InClass->HasAnyClassFlags(CLASS_Interface) &&
+		//	// Here is some loaded classes only logic, Blueprints will never have this info
+		//	!InClass->HasMetaData(FBlueprintMetadata::MD_CannotImplementInterfaceInBlueprint);
 	}
 
 	virtual bool IsUnloadedClassAllowed(const FClassViewerInitializationOptions& InInitOptions, const TSharedRef< const IUnloadedBlueprintData > InUnloadedClassData, TSharedRef< FClassViewerFilterFuncs > InFilterFuncs) override
 	{
 		// Unloaded interfaces mean they must be Blueprint Interfaces
 
+		return true;
 
 		// If it appears on the allowed child-of classes list (or there is nothing on that list)
 		//		AND it is NOT on the disallowed child-of classes list
 		//		AND it is NOT on the disallowed classes list
-		return InFilterFuncs->IfInChildOfClassesSet( AllowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Failed && 
-			InFilterFuncs->IfInChildOfClassesSet(DisallowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Passed && 
-			InFilterFuncs->IfInClassesSet(DisallowedClasses, InUnloadedClassData) != EFilterReturn::Passed &&
-			!InUnloadedClassData->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists) &&
-			InUnloadedClassData->HasAnyClassFlags(CLASS_Interface);
+		//return InFilterFuncs->IfInChildOfClassesSet( AllowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Failed && 
+		//	InFilterFuncs->IfInChildOfClassesSet(DisallowedChildrenOfClasses, InUnloadedClassData) != EFilterReturn::Passed && 
+		//	InFilterFuncs->IfInClassesSet(DisallowedClasses, InUnloadedClassData) != EFilterReturn::Passed &&
+		//	!InUnloadedClassData->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists) &&
+		//	InUnloadedClassData->HasAnyClassFlags(CLASS_Interface);
 	}
 };
 
@@ -8079,51 +8082,52 @@ void FBlueprintEditorUtils::PostEditChangeBlueprintActors(UBlueprint* Blueprint,
 
 FBlueprintEditorUtils::EPropertyWritableState FBlueprintEditorUtils::IsPropertyWritableInBlueprint(const UBlueprint* Blueprint, const UProperty* Property)
 {
-	if (Property)
-	{
-		if (!Property->HasAnyPropertyFlags(CPF_BlueprintVisible))
-		{
-			return EPropertyWritableState::NotBlueprintVisible;
-		}
-		if (Property->HasAnyPropertyFlags(CPF_BlueprintReadOnly))
-		{
-			return EPropertyWritableState::BlueprintReadOnly;
-		}
-		if (Property->GetBoolMetaData(FBlueprintMetadata::MD_Private))
-		{
-			const UClass* OwningClass = CastChecked<UClass>(Property->GetOuter());
-			if (OwningClass->ClassGeneratedBy != Blueprint)
-			{
-				return EPropertyWritableState::Private;
-			}
-		}
-	}
+	//if (Property)
+	//{
+	//	if (!Property->HasAnyPropertyFlags(CPF_BlueprintVisible))
+	//	{
+	//		return EPropertyWritableState::NotBlueprintVisible;
+	//	}
+	//	if (Property->HasAnyPropertyFlags(CPF_BlueprintReadOnly))
+	//	{
+	//		return EPropertyWritableState::BlueprintReadOnly;
+	//	}
+	//	if (Property->GetBoolMetaData(FBlueprintMetadata::MD_Private))
+	//	{
+	//		const UClass* OwningClass = CastChecked<UClass>(Property->GetOuter());
+	//		if (OwningClass->ClassGeneratedBy != Blueprint)
+	//		{
+	//			return EPropertyWritableState::Private;
+	//		}
+	//	}
+	//}
 	return EPropertyWritableState::Writable;
 }
 
 FBlueprintEditorUtils::EPropertyReadableState FBlueprintEditorUtils::IsPropertyReadableInBlueprint(const UBlueprint* Blueprint, const UProperty* Property)
 {
-	if (Property)
-	{
-		if (!Property->HasAnyPropertyFlags(CPF_BlueprintVisible))
-		{
-			return EPropertyReadableState::NotBlueprintVisible;
-		}
-		if (Property->GetBoolMetaData(FBlueprintMetadata::MD_Private))
-		{
-			const UClass* OwningClass = CastChecked<UClass>(Property->GetOuter());
-			if (OwningClass->ClassGeneratedBy != Blueprint)
-			{
-				return EPropertyReadableState::Private;
-			}
-		}
-	}
+	//if (Property)
+	//{
+	//	if (!Property->HasAnyPropertyFlags(CPF_BlueprintVisible))
+	//	{
+	//		return EPropertyReadableState::NotBlueprintVisible;
+	//	}
+	//	if (Property->GetBoolMetaData(FBlueprintMetadata::MD_Private))
+	//	{
+	//		const UClass* OwningClass = CastChecked<UClass>(Property->GetOuter());
+	//		if (OwningClass->ClassGeneratedBy != Blueprint)
+	//		{
+	//			return EPropertyReadableState::Private;
+	//		}
+	//	}
+	//}
 	return EPropertyReadableState::Readable;
 }
 
 bool FBlueprintEditorUtils::IsPropertyReadOnlyInCurrentBlueprint(const UBlueprint* Blueprint, const UProperty* Property)
 {
-	return (IsPropertyWritableInBlueprint(Blueprint, Property) != EPropertyWritableState::Writable);
+	return false;
+	//return (IsPropertyWritableInBlueprint(Blueprint, Property) != EPropertyWritableState::Writable);
 }
 
 void FBlueprintEditorUtils::FindAndSetDebuggableBlueprintInstances()
@@ -8542,6 +8546,8 @@ bool FBlueprintEditorUtils::IsPaletteActionReadOnly(TSharedPtr<FEdGraphSchemaAct
 {
 	check(BlueprintEditorIn.IsValid());
 	bool bIsReadOnly = false;
+	return false;
+
 	if(!BlueprintEditorIn->InEditingMode())
 	{
 		bIsReadOnly = true;

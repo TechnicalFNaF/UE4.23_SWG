@@ -319,10 +319,10 @@ static FBlueprintActionFilter BlueprintActionMenuUtilsImpl::MakeCallOnMemberFilt
 		for (TFieldIterator<UObjectProperty> PropertyIt(TargetClass, EFieldIteratorFlags::IncludeSuper); PropertyIt; ++PropertyIt)
 		{
  			UObjectProperty* ObjectProperty = *PropertyIt;
-			if (!ObjectProperty->HasAnyPropertyFlags(CPF_BlueprintVisible))
-			{
-				continue;
-			}
+			//if (!ObjectProperty->HasAnyPropertyFlags(CPF_BlueprintVisible))
+			//{
+			//	//continue;
+			//}
 
 			if ( ObjectProperty->HasMetaData(FBlueprintMetadata::MD_ExposeFunctionCategories) || 
 				(bForceAddComponents && FBlueprintEditorUtils::IsSCSComponentProperty(ObjectProperty)) )

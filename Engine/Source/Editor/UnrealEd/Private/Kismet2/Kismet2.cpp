@@ -1292,6 +1292,8 @@ void FKismetEditorUtilities::ConformBlueprintFlagsAndComponents(UBlueprint* Blue
 /** @return		true is it's possible to create a blueprint from the specified class */
 bool FKismetEditorUtilities::CanCreateBlueprintOfClass(const UClass* Class)
 {
+	return true;
+
 	bool bAllowDerivedBlueprints = false;
 	GConfig->GetBool(TEXT("Kismet"), TEXT("AllowDerivedBlueprints"), /*out*/ bAllowDerivedBlueprints, GEngineIni);
 
@@ -2092,6 +2094,8 @@ void FKismetEditorUtilities::PasteNodesHere( class UEdGraph* Graph, const FVecto
 
 bool FKismetEditorUtilities::CanPasteNodes( const class UEdGraph* Graph )
 {
+	return true;
+
 	bool bCanPaste = false;
 	TSharedPtr<class IBlueprintEditor> Kismet = GetIBlueprintEditorForObject(Graph,false);
 	if (Kismet.IsValid())

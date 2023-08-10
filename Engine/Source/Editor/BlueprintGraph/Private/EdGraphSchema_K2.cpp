@@ -64,6 +64,7 @@
 #include "K2Node_SetFieldsInStruct.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Classes/EditorStyleSettings.h"
+#include "Settings/EditorExperimentalSettings.h"
 #include "Editor.h"
 
 #include "Kismet/BlueprintMapLibrary.h"
@@ -1210,6 +1211,8 @@ bool UEdGraphSchema_K2::IsAllowableBlueprintVariableType(const UClass* InClass)
 
 bool UEdGraphSchema_K2::IsAllowableBlueprintVariableType(const UScriptStruct* InStruct, const bool bForInternalUse)
 {
+	if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll) return true;
+
 	if (const UUserDefinedStruct* UDStruct = Cast<const UUserDefinedStruct>(InStruct))
 	{
 		if (EUserDefinedStructureStatus::UDSS_UpToDate != UDStruct->Status.GetValue())
@@ -1284,6 +1287,8 @@ static bool IsUsingNonExistantVariable(const UEdGraphNode* InGraphNode, UBluepri
 
 bool UEdGraphSchema_K2::PinHasSplittableStructType(const UEdGraphPin* InGraphPin) const
 {
+	if (UEditorExperimentalSettings::StaticClass()->GetDefaultObject<UEditorExperimentalSettings>()->bEnabledShowAll) return true;
+
 	const FEdGraphPinType& PinType = InGraphPin->PinType;
 	bool bCanSplit = (!PinType.IsContainer() && PinType.PinCategory == PC_Struct);
 
