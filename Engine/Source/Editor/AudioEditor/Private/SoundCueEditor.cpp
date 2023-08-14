@@ -582,6 +582,34 @@ TSharedRef<SGraphEditor> FSoundCueEditor::CreateGraphEditorWidget()
 	InEvents.OnTextCommitted = FOnNodeTextCommitted::CreateSP(this, &FSoundCueEditor::OnNodeTitleCommitted);
 	InEvents.OnNodeDoubleClicked = FSingleNodeEvent::CreateSP(this, &FSoundCueEditor::PlaySingleNode);
 
+	if (!SoundCue->GetGraph())
+	{
+		SoundCue->CreateGraph();
+
+		if (auto NewlyFoundedNodeInventory = (USoundCueGraph*)SoundCue->GetGraph())
+		{
+			if (SoundCue->FirstNode)
+			{
+				TArray<USoundNode*> NodesToLoop;
+				SoundCue->FirstNode->GetAllNodes(NodesToLoop);
+				bool bFirst = true; // Scuffed ik
+				for (auto Node : NodesToLoop)
+				{
+					auto NewGraphPin = Cast<USoundCueGraphNode>(NewlyFoundedNodeInventory->CreateNode(USoundCueGraphNode::StaticClass()));
+					if (NewGraphPin)
+					{
+						if (bFirst)
+						{
+							bFirst = false;
+						}
+
+						NewGraphPin->SetSoundNode(Node);
+					}
+				}
+			}
+		}
+	}
+
 	return SNew(SGraphEditor)
 		.AdditionalCommands(GraphEditorCommands)
 		.IsEditable(true)

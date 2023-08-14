@@ -221,7 +221,7 @@ public:
 	void RemovePropertyChangedNotifier(FDelegateHandle InHandle );
 #endif
 
-protected:
+public:
 	virtual void NotifyGraphChanged( const FEdGraphEditAction& Action );
 
 	/** 
