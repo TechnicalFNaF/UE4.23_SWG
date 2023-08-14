@@ -1122,6 +1122,48 @@ void FUserDefinedStructureLayout::GenerateChildContent( IDetailChildrenBuilder& 
 	{
 		if(auto Struct = StructureDetailsSP->GetUserDefinedStruct())
 		{
+			if (!Struct->EditorData)
+			{
+				auto NewEditorData = (UUserDefinedStructEditorData*)StaticConstructObject_Internal(UUserDefinedStructEditorData::StaticClass(), Struct);
+				if (!NewEditorData) return;
+
+				NewEditorData->GenerateUniqueNameIdForMemberVariable();
+
+				for (TFieldIterator<UProperty> PropIt(Struct); PropIt; ++PropIt)
+				{
+					auto Property = *PropIt;
+
+					auto PropertyCategory = Property->GetCPPType();
+
+					auto PlainName = Property->GetFName().GetPlainNameString();
+					PlainName.Split("_", &PlainName, nullptr, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+					PlainName.Split("_", &PlainName, nullptr, ESearchCase::IgnoreCase, ESearchDir::FromEnd);
+
+					FStructVariableDescription NewStructDesc;
+					NewStructDesc.VarName = *PlainName;
+					NewStructDesc.VarGuid = FGuid::NewGuid();
+					NewStructDesc.FriendlyName = PlainName;
+					NewStructDesc.DefaultValue = L"";
+					NewStructDesc.Category = *PropertyCategory;
+					NewStructDesc.SubCategory = "None";
+
+					NewStructDesc.ContainerType = EPinContainerType::None;
+
+					if (Property->IsA<UMapProperty>())
+						NewStructDesc.ContainerType = EPinContainerType::Map;
+
+					if (Property->IsA<USetProperty>())
+						NewStructDesc.ContainerType = EPinContainerType::Set;
+
+					if (Property->IsA<UArrayProperty>())
+						NewStructDesc.ContainerType = EPinContainerType::Array;
+
+					NewEditorData->VariablesDescriptions.Add(NewStructDesc);
+				}
+
+				Struct->EditorData = NewEditorData;
+			}
+
 			auto& VarDescArrayRef = FStructureEditorUtils::GetVarDesc(Struct);
 			for (int32 Index = 0; Index < VarDescArrayRef.Num(); ++Index)
 			{
@@ -1129,7 +1171,7 @@ void FUserDefinedStructureLayout::GenerateChildContent( IDetailChildrenBuilder& 
 				uint32 PositionFlag = 0;
 				PositionFlag |= (0 == Index) ? EMemberFieldPosition::MFP_First : 0;
 				PositionFlag |= ((VarDescArrayRef.Num() - 1) == Index) ? EMemberFieldPosition::MFP_Last : 0;
-				TSharedRef<class FUserDefinedStructureFieldLayout> VarLayout = MakeShareable(new FUserDefinedStructureFieldLayout(StructureDetails,  SharedThis(this), VarDesc.VarGuid, PositionFlag));
+				TSharedRef<class FUserDefinedStructureFieldLayout> VarLayout = MakeShareable(new FUserDefinedStructureFieldLayout(StructureDetails, SharedThis(this), VarDesc.VarGuid, PositionFlag));
 				ChildrenBuilder.AddCustomBuilder(VarLayout);
 			}
 		}
