@@ -592,18 +592,31 @@ TSharedRef<SGraphEditor> FSoundCueEditor::CreateGraphEditorWidget()
 			{
 				TArray<USoundNode*> NodesToLoop;
 				SoundCue->FirstNode->GetAllNodes(NodesToLoop);
-				bool bFirst = true; // Scuffed ik
 				for (auto Node : NodesToLoop)
 				{
-					auto NewGraphPin = Cast<USoundCueGraphNode>(NewlyFoundedNodeInventory->CreateNode(USoundCueGraphNode::StaticClass()));
-					if (NewGraphPin)
-					{
-						if (bFirst)
-						{
-							bFirst = false;
-						}
+					auto NewLocation = NewlyFoundedNodeInventory->GetGoodPlaceForNewNode();
+					auto NewGraphNode = Cast<USoundCueGraphNode>(NewlyFoundedNodeInventory->CreateNode(USoundCueGraphNode::StaticClass()));
+					NewGraphNode->NodePosX = NewLocation.X;
+					NewGraphNode->NodePosY = NewLocation.Y;
 
-						NewGraphPin->SetSoundNode(Node);
+					if (NewGraphNode)
+					{
+						NewGraphNode->SetSoundNode(Node);
+
+						auto OutputPin = NewGraphNode->CreatePin(EEdGraphPinDirection::EGPD_Output, FEdGraphPinType(), L"Output");
+
+						for (auto ChildNode : Node->ChildNodes)
+							NewGraphNode->CreatePin(EEdGraphPinDirection::EGPD_Input, FEdGraphPinType(), L"");
+					}
+				}
+
+				for (auto Node : NodesToLoop)
+				{
+					TArray<USoundCueGraphNode*> SoundGraphNodes;
+					NewlyFoundedNodeInventory->GetNodesOfClass<USoundCueGraphNode>(SoundGraphNodes);
+
+					for (auto GraphNode : SoundGraphNodes)
+					{
 					}
 				}
 			}
